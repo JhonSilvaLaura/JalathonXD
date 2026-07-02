@@ -1,34 +1,45 @@
-version: '3.8'
-
 services:
+  # Backend Spring WebFlux
   backend:
-    build:
-      context: ./demo
-      dockerfile: Dockerfile
-    container_name: demo-backend
-    environment:
-      SERVER_PORT: 8080
-      DB_URL: r2dbc:postgresql://ep-rough-violet-adi6ri0k-pooler.c-2.us-east-1.aws.neon.tech/demo?sslmode=require&channel_binding=require
-      DB_USERNAME: neondb_owner
-      DB_PASSWORD: npg_pHT4NJx3gnSG
+    image: jhonbrayansilvalaura/jhon-silva-be:1.0
+    container_name: jhon-silva-backend
     ports:
       - "8080:8080"
+    environment:
+      # Credenciales de Neon Database (Cloud)
+      DB_URL: r2dbc:postgresql://ep-rough-violet-adi6ri0k-pooler.c-2.us-east-1.aws.neon.tech/demo?sslmode=require
+      DB_USERNAME: neondb_owner
+      DB_PASSWORD: npg_pHT4NJx3gnSG
     networks:
       - demo-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/api/users"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
+  # Frontend Angular
   frontend:
-    build:
-      context: ./demo-front
-      dockerfile: Dockerfile
-    container_name: demo-frontend
+    image: jhonbrayansilvalaura/jhon-silva-fe:1.0
+    container_name: jhon-silva-frontend
     ports:
       - "4200:80"
-    depends_on:
-      - backend
+    environment:
+      # URL del backend (desde el host Windows)
+      API_URL: http://localhost:8080
     networks:
       - demo-network
+    depends_on:
+      - backend
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
   demo-network:
