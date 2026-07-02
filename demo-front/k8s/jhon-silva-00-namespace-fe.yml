@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jhon-silva-frontend
+  labels:
+    name: jhon-silva-frontend
+    environment: production
+    app: angular-crud

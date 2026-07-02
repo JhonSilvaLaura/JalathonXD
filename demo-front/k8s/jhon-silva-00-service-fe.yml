@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhon-silva-frontend-service
+  namespace: jhon-silva-frontend
+  labels:
+    app: jhon-silva-frontend
+    tier: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: jhon-silva-frontend
+    tier: frontend
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30200
+  sessionAffinity: ClientIP
