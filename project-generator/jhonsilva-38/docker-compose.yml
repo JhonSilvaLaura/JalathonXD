@@ -1,0 +1,30 @@
+services:
+  # Backend Spring WebFlux
+  backend:
+    image: jhonbrayansilvalaura/jhonsilva-38:1.0
+    container_name: jhonsilva-38-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Credenciales de Neon Database (Cloud)
+      DB_URL: r2dbc:postgresql://dafsdfa/adfsaf?sslmode=require
+      DB_USERNAME: asdfdasfsa
+      DB_PASSWORD: asdfas
+      SERVER_PORT: 8080
+    networks:
+      - jhonsilva-38-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/api/studentses"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
+networks:
+  jhonsilva-38-network:
+    driver: bridge

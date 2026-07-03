@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS studentss CASCADE;
+
+CREATE TABLE IF NOT EXISTS studentss (
+    id SERIAL PRIMARY KEY,
+    "NAME" VARCHAR(100) NOT NULL,
+    "LASTNAME" VARCHAR(100) NOT NULL,
+    "COUNTRY" VARCHAR(100) NOT NULL,
+    "EMAIL" VARCHAR(100) NOT NULL,
+    status VARCHAR(20) DEFAULT 'ACTIVE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Ãndice para mejorar bÃºsquedas por status
+CREATE INDEX IF NOT EXISTS idx_studentss_status ON studentss(status);
+
